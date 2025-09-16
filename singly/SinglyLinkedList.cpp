@@ -9,6 +9,7 @@ class Node {
     public:
         Node(int data) {
             next = nullptr;
+            // this->data = data;
         }
 };
 class LinkedList {
@@ -29,6 +30,9 @@ class LinkedList {
         bool search(int data);
         void mergeSort(); // Function to sort the linked list using Merge Sort
         bool isEmpty();
+
+        Node* merge(Node* left, Node* right);
+        Node* getMiddle();
 };
 
 // Insert A Node At Head
@@ -119,6 +123,30 @@ bool LinkedList::search(int key) {
         current = current->next;
     }
 }
+
+void LinkedList::mergeSort() {
+    
+}
+
+
+Node* LinkedList::merge(Node* left, Node* right) {
+    if(!left) return right;
+    if(!right) return left;
+
+    Node* lead = nullptr;
+
+    if(left->data <= right->data) {
+        lead = left; // if left is less than right, we make left as head
+        left->next = merge(left->next, right);
+    }
+    else {
+        lead = right;
+        right->next = merge(left, right->next);
+    }
+    return lead;
+}
+
+
 
 // Add In Middle
 // Worst Case Time Complexity: O(n)

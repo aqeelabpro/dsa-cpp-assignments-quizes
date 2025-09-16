@@ -95,10 +95,6 @@ Node *LinkedList::getMiddle() {
         slow = slow->next;
         fast = fast->next->next;
     }
-    // // for odd length, skip middle
-    if (fast != NULL) {
-        slow = slow->next;
-    }
     return slow;
 }
 

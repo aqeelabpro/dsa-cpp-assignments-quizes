@@ -71,8 +71,8 @@ Node* LinkedList::reverse() {
     Node* next = nullptr;
     Node* current = head;
     while(current != nullptr) {
-        next = current->next; // point to next element
-        current->next = prev; // current->next in reverse
+        next = current->next;
+        current->next = prev;
         prev = current;
         current = next;
     }

@@ -92,7 +92,7 @@ int main() {
 
     list.printList();
 
-    list.swapNodeValues(list.getHead(),2);
+    list.swapNodeValues(list.getHead(), 2);
 
     list.printList();
 }
