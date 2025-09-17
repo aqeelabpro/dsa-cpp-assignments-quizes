@@ -28,7 +28,7 @@ class LinkedList {
 
         void display();
         bool search(int data);
-        Node* mergeSort(Node* head); // Function to sort the linked list using Merge Sort
+        void mergeSort(); // Function to sort the linked list using Merge Sort
         bool isEmpty();
 
         Node* merge(Node* left, Node* right);
@@ -124,19 +124,8 @@ bool LinkedList::search(int key) {
     }
 }
 
-Node* LinkedList::mergeSort(Node* head) {
-    if(head == nullptr || head->next == nullptr)    
-        return head;
-
-    Node* middle = getMiddle();
-    Node* nextOfMiddle = middle->next;  
-    middle->next = nullptr;
-
-    Node* left = mergeSort(head);
-    Node* right = mergeSort(nextOfMiddle);
+void LinkedList::mergeSort() {
     
-    Node* sorted = merge(left,right);
-    return sorted;  
 }
 
 
@@ -199,17 +188,4 @@ bool LinkedList::deleteNode(int key) {
     }
     // if we reach here, key was not found
     cout << "Key " << key << " not found. No insertion." << endl;
-}
-
-Node *LinkedList::getMiddle() {
-    if(isEmpty()) {
-        return nullptr;
-    }
-    Node* slow = head;
-    Node* fast = head->next;
-    while(fast != nullptr && fast->next != nullptr) {
-        slow = slow->next;
-        fast = fast->next->next;
-    }
-    return slow;
 }

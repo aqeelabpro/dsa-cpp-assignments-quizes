@@ -52,8 +52,8 @@ bool LinkedList::isPalindrome() {
     if(isEmpty()) {
         return true;
     }
-    Node* secondHalf = reverse(getMiddle());
     Node* firstHalf = head;
+    Node* secondHalf = reverse(getMiddle());
     while(secondHalf) {
         int firstData = firstHalf->data;
         int secondData = secondHalf->data;
@@ -75,7 +75,7 @@ Node* LinkedList::reverse(Node* node) {
     Node* next = nullptr;
     Node* current = node;
     while(current != nullptr) {
-        int data = current->data;
+        // int data = current->data;
         // cout << current->data << "  ";
         next = current->next; // point to next element
         current->next = prev; // current->next in reverse
