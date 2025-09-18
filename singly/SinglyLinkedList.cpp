@@ -9,7 +9,7 @@ class Node {
     public:
         Node(int data) {
             next = nullptr;
-            // this->data = data;
+            this->data = data;
         }
 };
 class LinkedList {
@@ -32,7 +32,9 @@ class LinkedList {
         bool isEmpty();
 
         Node* merge(Node* left, Node* right);
-        Node* getMiddle();
+        Node* getMiddle(Node* head);
+        Node* getHead();
+        void setHead(Node* h);
 };
 
 // Insert A Node At Head
@@ -52,7 +54,7 @@ void LinkedList::insertNodeAtEnd(int data) {
         return;
     }
     Node* current = head;
-    while(current != nullptr) {
+    while(current->next != nullptr) {
         current = current->next;
     }
     current->next = newNode;
@@ -64,12 +66,12 @@ void LinkedList::insertNodeAtEnd(int data) {
 bool LinkedList::deleteFirstNode() {
     if(isEmpty()) {
         cout << "List is Empty Cannot delete";
-        return;
+        return false;
     }
     Node* temp = head;
     head = head->next;
     delete temp;
-    temp = nullptr;
+    return true;
 }
 
 // Deletes Last Node
@@ -77,20 +79,21 @@ bool LinkedList::deleteFirstNode() {
 bool LinkedList::deleteLastNode() {
     if(isEmpty()) {
         cout << "List is Empty Cannot delete";
-        return;
+        return false;
     }
     if(head->next == nullptr) { // only single element
         delete head;
         head = nullptr;
-        return;
+        return true;
     }
     Node* current = head;
-    while(current->next->next != nullptr) { // check for element before the node to delete so we can delete the curren's next
+    while(current->next->next != nullptr) { // check for element before the node to delete so we can delete the current's next
         current = current->next;
     }
     Node* temp = current->next;
+    current->next = nullptr;
     delete temp;
-    temp = nullptr;
+    return true;
 }
 
 bool LinkedList::isEmpty() {
@@ -122,13 +125,14 @@ bool LinkedList::search(int key) {
         }
         current = current->next;
     }
+    return false;
 }
 
 Node* LinkedList::mergeSort(Node* head) {
     if(head == nullptr || head->next == nullptr)    
         return head;
 
-    Node* middle = getMiddle();
+    Node* middle = getMiddle(head);
     Node* nextOfMiddle = middle->next;  
     middle->next = nullptr;
 
@@ -168,9 +172,9 @@ void LinkedList::insertNodeInMiddle(int data, int key) {
     }
     Node* current = head;
     while( current != nullptr) {
-        Node* newNode = new Node(data);
         if(current->data == key) {
             // we found the element we have to insert after
+            Node* newNode = new Node(data);
             newNode->next = current->next;
             current->next = newNode;
             return;
@@ -186,23 +190,32 @@ void LinkedList::insertNodeInMiddle(int data, int key) {
 bool LinkedList::deleteNode(int key) {
     if(isEmpty()) {
         // list empty, so no element found, no deletion
-        return;
+        return false;
+    }
+    if(head->data == key) {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        return true;
     }
     Node* current = head;
-    while(current != nullptr) {
-        if(current->data == key) {
+    while(current->next != nullptr) {
+        if(current->next->data == key) {
             // we found the element we have to delete
-            delete current;
+            Node* temp = current->next;
+            current->next = temp->next;
+            delete temp;
             return true;
         }
         current = current->next;
     }
     // if we reach here, key was not found
-    cout << "Key " << key << " not found. No insertion." << endl;
+    cout << "Key " << key << " not found. No deletion." << endl;
+    return false;
 }
 
-Node *LinkedList::getMiddle() {
-    if(isEmpty()) {
+Node *LinkedList::getMiddle(Node* head) {
+    if(head == nullptr) {
         return nullptr;
     }
     Node* slow = head;
@@ -212,4 +225,57 @@ Node *LinkedList::getMiddle() {
         fast = fast->next->next;
     }
     return slow;
+}
+
+
+Node* LinkedList::getHead() { return head; }
+void LinkedList::setHead(Node* h) { head = h; }
+
+
+// ====================== MAIN ======================
+int main() {
+    LinkedList list;
+
+    cout << "Inserting at end: 10, 20, 30\n";
+    list.insertNodeAtEnd(10);
+    list.insertNodeAtEnd(20);
+    list.insertNodeAtEnd(30);
+    list.display();
+
+    cout << "Inserting at beginning: 5\n";
+    list.insertNodeAtBeginning(5);
+    list.display();
+
+    cout << "Inserting 15 after 10\n";
+    list.insertNodeInMiddle(15, 10);
+    list.display();
+
+    cout << "Searching for 20: " << (list.search(20) ? "Found" : "Not Found") << endl;
+    cout << "Searching for 99: " << (list.search(99) ? "Found" : "Not Found") << endl;
+
+    cout << "Deleting first node\n";
+    list.deleteFirstNode();
+    list.display();
+
+    cout << "Deleting last node\n";
+    list.deleteLastNode();
+    list.display();
+
+    cout << "Deleting node with key 15\n";
+    list.deleteNode(15);
+    list.display();
+
+    cout << "Adding unsorted elements: 40, 25, 5, 60\n";
+    list.insertNodeAtEnd(40);
+    list.insertNodeAtEnd(25);
+    list.insertNodeAtEnd(5);
+    list.insertNodeAtEnd(60);
+    list.display();
+
+    cout << "Sorting list using merge sort...\n";
+    Node* newHead = list.mergeSort(list.getHead());
+    list.setHead(newHead);
+    list.display();
+
+    return 0;
 }

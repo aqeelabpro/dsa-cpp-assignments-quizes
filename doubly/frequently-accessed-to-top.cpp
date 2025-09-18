@@ -83,9 +83,9 @@ int main() {
     DoublyLinkedList list;
     list.push_front(7);
     list.push_front(1);
-    // list.push_front(2);
-    // list.push_front(8);
-    // list.push_front(5);
+    list.push_front(2);
+    list.push_front(8);
+    list.push_front(5);
 
     cout << "Original list: ";
     list.printList();

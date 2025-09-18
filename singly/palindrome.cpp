@@ -75,8 +75,6 @@ Node* LinkedList::reverse(Node* node) {
     Node* next = nullptr;
     Node* current = node;
     while(current != nullptr) {
-        // int data = current->data;
-        // cout << current->data << "  ";
         next = current->next; // point to next element
         current->next = prev; // current->next in reverse
         prev = current;
@@ -115,7 +113,6 @@ int main() {
     LinkedList list2;
     list2.insertNodeAtBeginning(1);
     list2.insertNodeAtBeginning(2);
-    list2.insertNodeAtBeginning(3);
     list2.insertNodeAtBeginning(2);
     list2.insertNodeAtBeginning(1);
 

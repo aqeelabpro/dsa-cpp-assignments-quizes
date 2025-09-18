@@ -22,7 +22,6 @@ class LinkedList {
         void insertNodeAtBeginning(int data);
         void display();
         bool isEmpty();
-        bool isPalindrome();
         Node* reverse();
 };
 
@@ -47,21 +46,6 @@ void LinkedList::display() {
     cout << "NULL\n";
 }
 
-bool LinkedList::isPalindrome() {
-    if(isEmpty()) {
-    }
-    Node* original = head;
-    Node* reversed = reverse();
-    while(original != nullptr && reversed != nullptr) {
-        if(original->data != reversed->data)
-            return false;
-        original = original->next;
-        reversed = reversed->next;    
-    }
-    reverse();// restore the linkedlist back
-    return true;
-}
-
 Node* LinkedList::reverse() {
     if(isEmpty()) {
         cout << "List Empty, Can't be reversed";
@@ -78,4 +62,26 @@ Node* LinkedList::reverse() {
     }
     head = prev;
     return head;
+}
+
+int main() {
+    LinkedList list;
+
+    // Insert some nodes at the beginning
+    list.insertNodeAtBeginning(10);
+    list.insertNodeAtBeginning(20);
+    list.insertNodeAtBeginning(30);
+    list.insertNodeAtBeginning(40);
+    list.insertNodeAtBeginning(50);
+
+    cout << "Original List:\n";
+    list.display();
+
+    // Reverse the list
+    list.reverse();
+
+    cout << "Reversed List:\n";
+    list.display();
+
+    return 0;
 }
