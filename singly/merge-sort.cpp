@@ -9,7 +9,7 @@ class Node {
     public:
         Node(int data) {
             next = nullptr;
-            // this->data = data;
+            this->data = data;
         }
 };
 class LinkedList {
@@ -20,7 +20,7 @@ class LinkedList {
             head = nullptr;
         }
         void insertNodeAtBeginning(int data);
-        void insertNodeInMiddle(int data, int key); // Searches for 'key' and inserts a node after it
+        void insertNodeInMiddle(int data, int key); 
         void insertNodeAtEnd(int data);
         bool deleteFirstNode();
         bool deleteNode(int key);
@@ -28,11 +28,12 @@ class LinkedList {
 
         void display();
         bool search(int data);
-        void mergeSort(); // Function to sort the linked list using Merge Sort
+        Node* mergeSort(Node*);
         bool isEmpty();
 
         Node* merge(Node* left, Node* right);
-        Node* getMiddle();
+        Node* getMiddle(Node* head);
+        void mergeSort();
 };
 
 // Insert A Node At Head
@@ -52,7 +53,7 @@ void LinkedList::insertNodeAtEnd(int data) {
         return;
     }
     Node* current = head;
-    while(current != nullptr) {
+    while(current->next != nullptr) {
         current = current->next;
     }
     current->next = newNode;
@@ -64,12 +65,13 @@ void LinkedList::insertNodeAtEnd(int data) {
 bool LinkedList::deleteFirstNode() {
     if(isEmpty()) {
         cout << "List is Empty Cannot delete";
-        return;
+        return false;
     }
     Node* temp = head;
     head = head->next;
     delete temp;
     temp = nullptr;
+    return true;
 }
 
 // Deletes Last Node
@@ -77,12 +79,12 @@ bool LinkedList::deleteFirstNode() {
 bool LinkedList::deleteLastNode() {
     if(isEmpty()) {
         cout << "List is Empty Cannot delete";
-        return;
+        return false;
     }
     if(head->next == nullptr) { // only single element
         delete head;
         head = nullptr;
-        return;
+        return true;
     }
     Node* current = head;
     while(current->next->next != nullptr) { // check for element before the node to delete so we can delete the curren's next
@@ -91,6 +93,7 @@ bool LinkedList::deleteLastNode() {
     Node* temp = current->next;
     delete temp;
     temp = nullptr;
+    return true;
 }
 
 bool LinkedList::isEmpty() {
@@ -122,10 +125,25 @@ bool LinkedList::search(int key) {
         }
         current = current->next;
     }
+    return false;
+}
+
+Node* LinkedList::mergeSort(Node* head) {
+    if(!head) return nullptr;
+    if(head->next == nullptr) return head;
+
+    Node* middle = getMiddle(head);
+    Node* nextToMiddle = middle->next;
+    middle->next = nullptr;
+
+    Node* left = mergeSort(head);
+    Node* right = mergeSort(nextToMiddle);
+
+    return merge(left,right);
 }
 
 void LinkedList::mergeSort() {
-    
+    head = mergeSort(head);
 }
 
 
@@ -175,7 +193,7 @@ void LinkedList::insertNodeInMiddle(int data, int key) {
 bool LinkedList::deleteNode(int key) {
     if(isEmpty()) {
         // list empty, so no element found, no deletion
-        return;
+        return false;
     }
     Node* current = head;
     while(current != nullptr) {
@@ -188,4 +206,34 @@ bool LinkedList::deleteNode(int key) {
     }
     // if we reach here, key was not found
     cout << "Key " << key << " not found. No insertion." << endl;
+    return false;
+}
+
+int main() {
+    LinkedList l1;
+    l1.insertNodeAtEnd(1);
+    l1.insertNodeAtEnd(3);
+    l1.insertNodeAtEnd(5);
+    l1.insertNodeAtEnd(7);
+    l1.insertNodeAtEnd(2);
+    l1.insertNodeAtEnd(4);
+    l1.insertNodeAtEnd(6);
+    l1.insertNodeAtEnd(8);
+    l1.mergeSort();
+    l1.display();
+
+    return 0;
+}
+
+Node* LinkedList::getMiddle(Node* head) {
+    if(isEmpty()) {
+        return nullptr;
+    }
+    Node* slow = head;
+    Node* fast = head->next;
+    while(fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
 }
